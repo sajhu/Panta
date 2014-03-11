@@ -1,5 +1,14 @@
 package co.panta.android;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OptionalDataException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 
 import android.content.Context;
@@ -10,16 +19,17 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
-import co.panta.android.*;
+import co.panta.android.model.Panta;
+import co.panta.android.pojos.Usuario;
+import co.panta.android.pojos.Viaje;
 
 public class MainPanta extends FragmentActivity {
+
+	private static final String PERSISTENCIA_ARCHIVO_VIAJES = "viajes.data";
 
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -36,6 +46,8 @@ public class MainPanta extends FragmentActivity {
 	 */
 	ViewPager mViewPager;
 
+	private Panta panta;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -43,15 +55,153 @@ public class MainPanta extends FragmentActivity {
 
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the app.
+		
+		
+		
 		mSectionsPagerAdapter = new SectionsPagerAdapter(
 				getSupportFragmentManager());
 
 		// Set up the ViewPager with the sections adapter.
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 		mViewPager.setAdapter(mSectionsPagerAdapter);
+		
+		
+		
+		// CONTROL APLICACIÓN
+		if(!estaLogueado())
+		{
+	        Intent intentSettings = new Intent(this, LoginActivity.class);
+	        this.startActivity(intentSettings);
+		}
 
+        
+		panta = new Panta();
+		
+		
+		boolean seCargo = cargarViajesMemoria();
+		
+		if(!seCargo || panta.necesitoActualizarme())
+			cargarViajesServidor();
+
+		
+	
+	}
+	
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		
+		//echo("Volvimos ...");
+
+		//cargarViajesServidor();
+
+		
+	}
+	
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		
+		guardarViajesMemoria();
 	}
 
+	
+	private void guardarViajesMemoria() {
+
+		Context context = getApplicationContext();
+		FileOutputStream fos = null;
+		try {
+			fos = context.openFileOutput(PERSISTENCIA_ARCHIVO_VIAJES, Context.MODE_PRIVATE);
+			
+			ObjectOutputStream os = new ObjectOutputStream(fos);
+			os.writeObject(panta);
+			os.close();	
+			echo("exito persistiendo");
+
+			
+		} catch (FileNotFoundException e) {
+			
+			Log.d(MainPanta.class.toString(), e.getLocalizedMessage());
+			echo("ERROR: el archivo de persistencia no existe");
+			
+		} catch (IOException e) {
+			
+			Log.d(MainPanta.class.toString(), e.getLocalizedMessage());
+			echo("ERROR: no se pudo guardar los viajes");
+		} finally {
+			
+			try {
+				fos.close();
+			} catch (IOException e) {
+				Log.d(MainPanta.class.toString(), e.getLocalizedMessage());
+				echo("ERROR: cerrando el archivo de persistencia");
+
+			}
+		}
+		
+	}
+
+
+	private void cargarViajesServidor() {
+		
+		
+		echo("Descargando...");
+		
+		//TODO poner el codigo de carga.. debe generar un ArrayList
+		// de Viaje (ArrayList<Viaje>) y llamar a panta
+		
+		ArrayList<Viaje> nuevosViajes = new ArrayList<Viaje>();
+		
+		
+		
+		Viaje viajePrueba = new Viaje(0, "viaje de prueba android", new Date(), "2100", 3);
+		
+		Usuario usuarioPrueba = new Usuario(1, "Santiago", "Rojas", "http://wheels.comoj.com/fotos/1.png", "3016957229");
+		
+		viajePrueba.setDriver(usuarioPrueba);
+		
+		nuevosViajes.add(viajePrueba);
+		
+		
+		//NO OLVIDAR REVISAR CASOS DE RESPONSE != 0, en especial response 1
+		panta.actualizar(nuevosViajes);
+		
+	}
+
+	private boolean cargarViajesMemoria() {
+		
+		boolean cargado = false;
+		
+		Context context = getApplicationContext();
+		
+		FileInputStream fis;
+		try {
+			
+			fis = context.openFileInput(PERSISTENCIA_ARCHIVO_VIAJES);
+			ObjectInputStream is = new ObjectInputStream(fis);
+			panta = (Panta) is.readObject();
+			is.close();
+			
+			if(panta.viajes.size() > 0)
+				cargado = true;
+
+		} catch (FileNotFoundException e) {
+			Log.d(MainPanta.class.toString(), "error cargando panda");
+		} catch (OptionalDataException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+		return cargado;
+		
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -64,29 +214,36 @@ public class MainPanta extends FragmentActivity {
 			    
 	    
 	    switch(item.getItemId()) {
+	    
 	    case R.id.action_settings:
-	        Intent intent = new Intent(this, SettingsActivity.class);
-	        this.startActivity(intent);
+	        Intent intentSettings = new Intent(this, SettingsActivity.class);
+	        this.startActivity(intentSettings);
 	        break;
-//	    case R.id.menu_item2:
-//	        // another startActivity, this is for item with id "menu_item2"
+	        
+	    case R.id.action_share:
+//	        Intent intentSettings = new Intent(this, SettingsActivity.class);
+//	        this.startActivity(intentSettings);
+	        
+	        break;
+	        
+//	    case R.id.action_login:
+//	        Intent intentLogin = new Intent(this, LoginActivity.class);
+//	        this.startActivity(intentLogin);
 //	        break;
+	        
+	    case R.id.action_refresh:
+	        cargarViajesServidor();
+	        break;
+	        
 	    default:
 	        return super.onOptionsItemSelected(item);
+	        
 	    }
 
 	    return true;
 	}
 	
-	public void echo(String text)
-	{
-		Context context = getApplicationContext();
-		int duration = Toast.LENGTH_SHORT;
 
-		
-		Toast toast = Toast.makeText(context, text, duration);
-		toast.show();
-	}
 
 	/**
 	 * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -149,5 +306,22 @@ public class MainPanta extends FragmentActivity {
 		}
 	}
 
+	public void echo(String text)
+	{
+		Context context = getApplicationContext();
+		int duration = Toast.LENGTH_SHORT;
+
+		
+		Toast toast = Toast.makeText(context, text, duration);
+		toast.show();
+	}
+	
+	private boolean estaLogueado()
+	{
+		
+		
+		return false;
+	}
+	
 	
 }

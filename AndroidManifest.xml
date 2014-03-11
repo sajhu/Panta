@@ -15,8 +15,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="co.panta.android.MainPanta"
-            android:label="@string/app_name" 
-            android:theme="@android:style/Theme.Holo.Light">
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Holo.Light" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,6 +28,23 @@
             android:label="@string/title_activity_settings"
             android:parentActivityName="co.panta.android.MainPanta"
             android:theme="@android:style/Theme.Holo.Light" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="co.panta.android.MainPanta" />
+        </activity>
+        <activity
+            android:name="co.panta.android.LoginActivity"
+            android:label="@string/title_activity_login"
+            android:theme="@android:style/Theme.Holo.Light"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="co.panta.android.MainPanta" />
+        </activity>
+        <activity
+            android:name="co.panta.android.DetalleViajeActivity"
+            android:label="@string/title_activity_detalle_viaje"
+            android:parentActivityName="co.panta.android.MainPanta" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="co.panta.android.MainPanta" />
