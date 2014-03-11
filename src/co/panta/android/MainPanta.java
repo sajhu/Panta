@@ -31,7 +31,7 @@ public class MainPanta extends FragmentActivity {
 
 	private static final String PERSISTENCIA_ARCHIVO_VIAJES = "viajes.data";
 
-	private static final String INTENT_DAR_VIAJE = "co.panta.android.pojos.Viaje";
+	public static final String INTENT_DAR_VIAJE = "co.panta.android.pojos.Viaje";
 
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -230,8 +230,9 @@ public class MainPanta extends FragmentActivity {
 	    case R.id.action_demo_viaje:
 	        Intent intentDemo = new Intent(this, DetalleViajeActivity.class);
 	        if(panta.viajes.get(0) != null)
-	        intentDemo.putExtra(INTENT_DAR_VIAJE, panta.viajes.get(0));
-	        
+	        	intentDemo.putExtra(INTENT_DAR_VIAJE, panta.viajes.get(0));
+	        else
+	        	echo("no tengo viajes");
 	        this.startActivity(intentDemo);
 	        break;
 	        
