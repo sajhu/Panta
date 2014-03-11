@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Panta</string>
+    <string name="action_settings">Ajustes</string>
+    <string name="title_section_pasajero">Pasajero</string>
+    <string name="title_section_conductor">Conductor</string>
+    <string name="title_section_perfil">Mi Perfil</string>
+
+</resources>
