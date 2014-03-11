@@ -26,11 +26,19 @@ public class Panta implements Serializable {
 		fechaActualización = new Date();
 	}
 
+	/**
+	 * Agregar el viaje dado por parametro a la lista
+	 * @param viaje - el viaje a ser agregado
+	 */
 	public void agregarViaje(Viaje viaje)
 	{
 		viajes.add(viaje);
 	}
 
+	/**
+	 * actualiza la lista de viajes con un nuevo ArrayList, eliminando los viejos
+	 * @param nuevosViajes
+	 */
 	public void actualizar(ArrayList<Viaje> nuevosViajes)
 	{
 		
@@ -43,6 +51,11 @@ public class Panta implements Serializable {
 		//return "A" + actualizaciones +": " + viajes.size() + " nuevos viajes"; 
 	}
 
+	/**
+	 * da el viaje según su identificador
+	 * @param id int con el identificador
+	 * @return Viaje el viaje
+	 */
 	public Viaje darViaje(int id)
 	{
 		for (int i = 0; i < viajes.size(); i++) {

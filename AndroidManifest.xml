@@ -44,7 +44,8 @@
         <activity
             android:name="co.panta.android.DetalleViajeActivity"
             android:label="@string/title_activity_detalle_viaje"
-            android:parentActivityName="co.panta.android.MainPanta" >
+            android:parentActivityName="co.panta.android.MainPanta"
+            android:theme="@android:style/Theme.Holo.Light" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="co.panta.android.MainPanta" />

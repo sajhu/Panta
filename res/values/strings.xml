@@ -2,9 +2,21 @@
 <resources>
 
     <string name="app_name">Panta</string>
+    
     <string name="action_settings">Ajustes</string>
+    <string name="action_login">Iniciar Sesión</string>
+    <string name="action_refresh">Actualizar</string>
+    <string name="action_search">Filtrar #</string>
+    <string name="action_favorite">Guardar en Favoritos</string>
+    <string name="action_share">Compartir</string>
+    <string name="action_demo_viaje">Ver Viaje</string>
+    
+    
     <string name="title_section_pasajero">Pasajero</string>
     <string name="title_section_conductor">Conductor</string>
     <string name="title_section_perfil">Mi Perfil</string>
+    <string name="image_logo_description">Panta</string>
+    <string name="title_activity_detalle_viaje">Ver Viaje</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

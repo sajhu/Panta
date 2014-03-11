@@ -31,6 +31,8 @@ public class MainPanta extends FragmentActivity {
 
 	private static final String PERSISTENCIA_ARCHIVO_VIAJES = "viajes.data";
 
+	private static final String INTENT_DAR_VIAJE = "co.panta.android.pojos.Viaje";
+
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide
 	 * fragments for each of the sections. We use a
@@ -80,6 +82,7 @@ public class MainPanta extends FragmentActivity {
 		
 		boolean seCargo = cargarViajesMemoria();
 		
+		echo(panta.actualizaciones + " Actualizaciones");
 		if(!seCargo || panta.necesitoActualizarme())
 			cargarViajesServidor();
 
@@ -170,6 +173,10 @@ public class MainPanta extends FragmentActivity {
 		
 	}
 
+	/**
+	 * Carga la lista de viajes desde la memoria interna privada al modelo del mundo
+	 * @return true si se lograron cargar viajes
+	 */
 	private boolean cargarViajesMemoria() {
 		
 		boolean cargado = false;
@@ -220,16 +227,18 @@ public class MainPanta extends FragmentActivity {
 	        this.startActivity(intentSettings);
 	        break;
 	        
-	    case R.id.action_share:
-//	        Intent intentSettings = new Intent(this, SettingsActivity.class);
-//	        this.startActivity(intentSettings);
+	    case R.id.action_demo_viaje:
+	        Intent intentDemo = new Intent(this, DetalleViajeActivity.class);
+	        if(panta.viajes.get(0) != null)
+	        intentDemo.putExtra(INTENT_DAR_VIAJE, panta.viajes.get(0));
 	        
+	        this.startActivity(intentDemo);
 	        break;
 	        
-//	    case R.id.action_login:
-//	        Intent intentLogin = new Intent(this, LoginActivity.class);
-//	        this.startActivity(intentLogin);
-//	        break;
+	    case R.id.action_login:
+	        Intent intentLogin = new Intent(this, LoginActivity.class);
+	        this.startActivity(intentLogin);
+	        break;
 	        
 	    case R.id.action_refresh:
 	        cargarViajesServidor();
@@ -320,7 +329,7 @@ public class MainPanta extends FragmentActivity {
 	{
 		
 		
-		return false;
+		return true;
 	}
 	
 	
