@@ -17,6 +17,15 @@
     <string name="title_section_perfil">Mi Perfil</string>
     <string name="image_logo_description">Panta</string>
     <string name="title_activity_detalle_viaje">Ver Viaje</string>
+    
     <string name="hello_world">Hello world!</string>
-
+    <string name="dummy_hour">6:20</string>
+    
+    
+    <string name="boton_detalle_llamar">Llamar</string>
+    <string name="boton_detalle_sms">SMS</string>
+    <string name="sms_question">Hola, ¿todavía tienes cupo?</string>
+    
+    
+    
 </resources>

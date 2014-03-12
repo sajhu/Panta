@@ -8,9 +8,67 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".DetalleViajeActivity" >
 
+     <TextView
+         android:id="@+id/detalle_descripcion_viaje"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="Descripcion ruta"
+         android:textColor="@color/pantaBlue"
+         android:textSize="30dp"
+         android:typeface="sans" />
+
     <TextView
+        android:id="@+id/detalle_viaje_hora"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/detalle_descripcion_viaje"
+        android:layout_below="@+id/detalle_descripcion_viaje"
+        android:layout_marginTop="15dp"
+        android:text="@string/dummy_hour"
+        android:textColor="#666666"
+        android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/detalle_conductor_nombre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/detalle_viaje_hora"
+        android:layout_below="@+id/detalle_viaje_hora"
+        android:layout_marginTop="37dp"
         android:text="@string/hello_world" />
+    
+    <ImageView
+        android:id="@+id/detalle_usuario_foto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/detalle_conductor_nombre"
+        android:layout_marginLeft="31dp"
+        android:layout_toRightOf="@+id/detalle_descripcion_viaje"
+        android:src="@drawable/ic_launcher" />
+
+    <Button
+        android:id="@+id/boton_detalle_llamar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/boton_detalle_sms"
+        android:layout_alignBottom="@+id/boton_detalle_sms"
+        android:layout_alignLeft="@+id/detalle_conductor_nombre"
+        android:layout_marginLeft="44dp"
+        android:text="@string/boton_detalle_llamar"
+        android:drawableLeft="@drawable/ic_action_call"
+        android:onClick="llamar"
+         />
+
+    <Button
+        android:id="@+id/boton_detalle_sms"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/detalle_usuario_foto"
+        android:layout_marginTop="52dp"
+        android:layout_toLeftOf="@+id/detalle_usuario_foto"
+        android:text="@string/boton_detalle_sms" 
+        android:drawableLeft="@drawable/ic_action_new_email"
+        android:onClick="sms"
+        />
 
 </RelativeLayout>

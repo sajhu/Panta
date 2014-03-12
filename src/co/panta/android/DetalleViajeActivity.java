@@ -1,19 +1,33 @@
 package co.panta.android;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import org.ocpsoft.prettytime.PrettyTime;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import co.panta.android.pojos.Viaje;
+import co.panta.android.services.DownloadImageTask;
 
-public class DetalleViajeActivity extends Activity {
+public class DetalleViajeActivity extends Activity  {
 
 	private Viaje viaje;
 
+	@SuppressWarnings("unused")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -25,6 +39,29 @@ public class DetalleViajeActivity extends Activity {
 		
 		viaje = (Viaje) intent.getSerializableExtra(MainPanta.INTENT_DAR_VIAJE);
 		
+		cargarImagen(R.id.detalle_usuario_foto, viaje.conductor.foto);
+
+		
+		poblarTexto(R.id.detalle_descripcion_viaje, viaje.descripcion);
+		
+		poblarTexto(R.id.detalle_conductor_nombre, viaje.conductor.toString());
+		
+		Button boton_llamar = (Button) findViewById(R.id.boton_detalle_llamar);
+		Button boton_sms = (Button) findViewById(R.id.boton_detalle_sms);
+		
+
+		
+		poblarTexto(R.id.detalle_viaje_hora, tiempoRelativo(viaje.fecha, viaje.hora));
+
+		
+		
+	}
+
+	private void poblarTexto(int id, String texto) {
+		
+		TextView descripcion = (TextView) findViewById(id);
+		
+		descripcion.setText(texto);
 	}
 
 	/**
@@ -78,6 +115,23 @@ public class DetalleViajeActivity extends Activity {
 		echo("Guardado ...");
 	}
 
+	
+	public void sms(View view)
+	{
+		Uri smsUri = Uri.parse("sms:"+viaje.conductor.telefono);
+		Intent intent = new Intent(Intent.ACTION_VIEW, smsUri);
+		intent.putExtra("sms_body", getString(R.string.sms_question));
+		startActivity(intent);
+		
+	}
+	
+	public void llamar(View view)
+	{
+		 Intent callIntent = new Intent(Intent.ACTION_CALL);          
+         callIntent.setData(Uri.parse("tel:"+viaje.conductor.telefono));          
+         startActivity(callIntent);  
+	}
+	
 	public void echo(String text)
 	{
 		Context context = getApplicationContext();
@@ -88,4 +142,37 @@ public class DetalleViajeActivity extends Activity {
 		toast.show();
 	}
 
+	
+	public void cargarImagen(int id, String url)
+	{
+		new DownloadImageTask((ImageView) findViewById(id)).execute(url);
+	}
+
+	public String tiempoRelativo(Date fecha, String hora)
+	{		
+		
+		DateFormat soloFecha = new SimpleDateFormat("yyy-MM-dd");
+
+		String fechaViaje = soloFecha.format(fecha) + " " + hora;
+
+		Date fechaCreada = null;
+		try {
+			DateFormat conHoras = new SimpleDateFormat("yyyy-MM-dd HHmm");
+
+			fechaCreada = conHoras.parse(fechaViaje);
+			
+			
+			
+			PrettyTime p = new PrettyTime();
+			
+			poblarTexto(R.id.detalle_viaje_hora, p.format(fechaCreada));
+			
+			return p.format(fecha);
+
+			
+		} catch (ParseException e) {
+			return fechaCreada.toString();
+		}
+	}
+	
 }
