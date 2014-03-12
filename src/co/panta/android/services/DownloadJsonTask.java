@@ -44,6 +44,7 @@ public class DownloadJsonTask extends AsyncTask<String, Void, ArrayList<Viaje>>{
 	private static final String TAG_DRIVER = "driver";
 	private static final String TAG_DRIVER_ID = "id";
 	private static final String TAG_DRIVER_NAME = "name";
+	private static final String TAG_DRIVER_SURNAME = "surname";
 	private static final String TAG_DRIVER_PICTURE = "picture";
 	private static final String TAG_DRIVER_PHONE = "phone";
 	// contacts JSONArray
@@ -92,13 +93,14 @@ public class DownloadJsonTask extends AsyncTask<String, Void, ArrayList<Viaje>>{
 					JSONObject driver = c.getJSONObject(TAG_DRIVER);
 					int driverid = driver.getInt(TAG_DRIVER_ID);
 					String name = driver.getString(TAG_DRIVER_NAME);
+					String surname = driver.getString(TAG_DRIVER_SURNAME);
 					String picture = driver.getString(TAG_DRIVER_PICTURE);
 					String mobile = driver.getString(TAG_DRIVER_PHONE);
 
 
 					Viaje viajePrueba = new Viaje(id, descripcion, date, time, seats);
 
-					Usuario usuarioPrueba = new Usuario(1, name,"Rojas", picture, mobile);
+					Usuario usuarioPrueba = new Usuario(driverid, name,surname, picture, mobile);
 
 					viajePrueba.setDriver(usuarioPrueba);
 

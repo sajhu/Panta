@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import co.panta.android.pojos.Viaje;
 import co.panta.android.services.DownloadImageTask;
+import co.panta.android.services.RoundedImageView;
 
 public class DetalleViajeActivity extends Activity  {
 
@@ -149,7 +150,7 @@ public class DetalleViajeActivity extends Activity  {
 	
 	public void cargarImagen(int id, String url)
 	{
-		new DownloadImageTask((ImageView) findViewById(id)).execute(url);
+		new DownloadImageTask((ImageView) findViewById(id), true).execute(url);
 	}
 
 	@SuppressLint("SimpleDateFormat")
@@ -160,6 +161,7 @@ public class DetalleViajeActivity extends Activity  {
 		String fechaViaje = fecha + " " + hora;
 		
 		DateFormat conHoras = new SimpleDateFormat("yyyy-MM-dd HHmm");
+		DateFormat laHora = new SimpleDateFormat("h:mm a");
 
 		try {
 			
@@ -170,7 +172,7 @@ public class DetalleViajeActivity extends Activity  {
 			
 			poblarTexto(R.id.detalle_viaje_hora, p.format(fechaCreada));
 			
-			return p.format(fechaCreada);
+			return p.format(fechaCreada) + " (" + laHora.format(fechaCreada) +")";
 
 			
 		} catch (ParseException e) {

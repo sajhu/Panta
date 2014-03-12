@@ -31,7 +31,7 @@
     <!-- integración con SMS -->
     <string name="boton_detalle_llamar">Llamar</string>
     <string name="boton_detalle_sms">SMS</string>
-    <string name="sms_question">Hola, ¿todavía tienes cupo?</string>
+    <string name="sms_question">Hola, ¿todavía tienes cupo? (vía Panta)</string>
     
     
     
