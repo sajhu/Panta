@@ -2,9 +2,7 @@ package co.panta.android.services;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.widget.Toast;
 
 public class F {

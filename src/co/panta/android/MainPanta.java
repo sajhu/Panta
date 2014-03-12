@@ -8,7 +8,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OptionalDataException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Locale;
 
 import android.content.Context;
@@ -22,10 +21,11 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.Toast;
 import co.panta.android.model.Panta;
-import co.panta.android.pojos.Usuario;
 import co.panta.android.pojos.Viaje;
+import co.panta.android.services.DownloadJsonTask;
 
 public class MainPanta extends FragmentActivity {
 
@@ -121,7 +121,7 @@ public class MainPanta extends FragmentActivity {
 			ObjectOutputStream os = new ObjectOutputStream(fos);
 			os.writeObject(panta);
 			os.close();	
-			echo("exito persistiendo");
+			//echo("exito persistiendo");
 
 			
 		} catch (FileNotFoundException e) {
@@ -158,14 +158,14 @@ public class MainPanta extends FragmentActivity {
 		ArrayList<Viaje> nuevosViajes = new ArrayList<Viaje>();
 		
 		
-		
-		Viaje viajePrueba = new Viaje(0, "viaje de prueba android", new Date(), "2100", 3);
-		
-		Usuario usuarioPrueba = new Usuario(1, "Santiago", "Rojas", "http://wheels.comoj.com/fotos/1.png", "3016957229");
-		
-		viajePrueba.setDriver(usuarioPrueba);
-		
-		nuevosViajes.add(viajePrueba);
+		new DownloadJsonTask(nuevosViajes).execute(DownloadJsonTask.URL_BASICA);
+//		Viaje viajePrueba = new Viaje(0, "Salgo por la #7 luego la #140 hasta #Cedritos. PRE", "2014-03-12", "2100", 3);
+//		
+//		Usuario usuarioPrueba = new Usuario(1, "Santiago", "Rojas", "http://wheels.comoj.com/fotos/1.png", "3016957229");
+//		
+//		viajePrueba.setDriver(usuarioPrueba);
+//		
+//		nuevosViajes.add(viajePrueba);
 		
 		
 		//NO OLVIDAR REVISAR CASOS DE RESPONSE != 0, en especial response 1

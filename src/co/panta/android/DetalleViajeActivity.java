@@ -7,6 +7,7 @@ import java.util.Date;
 
 import org.ocpsoft.prettytime.PrettyTime;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -45,9 +46,9 @@ public class DetalleViajeActivity extends Activity  {
 		poblarTexto(R.id.detalle_descripcion_viaje, viaje.descripcion);
 		
 		poblarTexto(R.id.detalle_conductor_nombre, viaje.conductor.toString());
-		
-		Button boton_llamar = (Button) findViewById(R.id.boton_detalle_llamar);
-		Button boton_sms = (Button) findViewById(R.id.boton_detalle_sms);
+//		
+//		Button boton_llamar = (Button) findViewById(R.id.boton_detalle_llamar);
+//		Button boton_sms = (Button) findViewById(R.id.boton_detalle_sms);
 		
 
 		
@@ -148,30 +149,29 @@ public class DetalleViajeActivity extends Activity  {
 		new DownloadImageTask((ImageView) findViewById(id)).execute(url);
 	}
 
-	public String tiempoRelativo(Date fecha, String hora)
+	@SuppressLint("SimpleDateFormat")
+	public String tiempoRelativo(String fecha, String hora)
 	{		
 		
-		DateFormat soloFecha = new SimpleDateFormat("yyy-MM-dd");
 
-		String fechaViaje = soloFecha.format(fecha) + " " + hora;
+		String fechaViaje = fecha + " " + hora;
+		
+		DateFormat conHoras = new SimpleDateFormat("yyyy-MM-dd HHmm");
 
-		Date fechaCreada = null;
 		try {
-			DateFormat conHoras = new SimpleDateFormat("yyyy-MM-dd HHmm");
-
-			fechaCreada = conHoras.parse(fechaViaje);
 			
+			Date fechaCreada = conHoras.parse(fechaViaje);
 			
 			
 			PrettyTime p = new PrettyTime();
 			
 			poblarTexto(R.id.detalle_viaje_hora, p.format(fechaCreada));
 			
-			return p.format(fecha);
+			return p.format(fechaCreada);
 
 			
 		} catch (ParseException e) {
-			return fechaCreada.toString();
+			return hora + " (" + fecha + ")";
 		}
 	}
 	

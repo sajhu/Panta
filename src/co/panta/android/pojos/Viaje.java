@@ -12,16 +12,16 @@ public class Viaje implements Serializable {
 	private static final long serialVersionUID = 1L;
 	public int id;
 	public String descripcion;
-	public Date fecha;
+	public String fecha;
 	public String hora;
 	public int sillas;
 	public Usuario conductor;
 
-	public Viaje(int id, String descripcion, Date fecha, String hora, int sillas)
+	public Viaje(int id, String descripcion, String string, String hora, int sillas)
 	{
 		this.id = id;
 		this.descripcion = descripcion;
-		this.fecha = fecha;
+		this.fecha = string;
 		this.hora = hora ;
 		this.sillas = sillas;
 		

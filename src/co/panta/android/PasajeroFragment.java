@@ -21,7 +21,7 @@ public class PasajeroFragment extends Fragment {
 		View rootView = inflater.inflate(
 				R.layout.fragment_viajes, container, false);
 		TextView dummyTextView = (TextView) rootView
-				.findViewById(R.id.section_label);
+				.findViewById(R.id.prueba_viajes);
 		dummyTextView.setText("Sajhu was here " + Integer.toString(getArguments().getInt(
 				ARG_SECTION_NUMBER)));
 		return rootView;
