@@ -46,9 +46,12 @@ public class DetalleViajeActivity extends Activity  {
 		poblarTexto(R.id.detalle_descripcion_viaje, viaje.descripcion);
 		
 		poblarTexto(R.id.detalle_conductor_nombre, viaje.conductor.toString());
-//		
-//		Button boton_llamar = (Button) findViewById(R.id.boton_detalle_llamar);
-//		Button boton_sms = (Button) findViewById(R.id.boton_detalle_sms);
+		
+	
+		poblarTexto(R.id.detalle_viaje_cupos, viaje.sillas + " cupos");
+		
+		Button boton_llamar = (Button) findViewById(R.id.boton_detalle_llamar);
+		Button boton_sms = (Button) findViewById(R.id.boton_detalle_sms);
 		
 
 		

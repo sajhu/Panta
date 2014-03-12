@@ -26,6 +26,7 @@
     <string name="dummy_hour">6:20</string>
     <string name="dummy_usuario">Alejandro Hernandez</string>
     <string name="dummy_descripcion">Salgo por la <b>#7</b> hasta <b>#Palatino</b></string>
+    <string name="dummy_cupos"><b>3</b> cupos</string>
     
     <!-- integración con SMS -->
     <string name="boton_detalle_llamar">Llamar</string>

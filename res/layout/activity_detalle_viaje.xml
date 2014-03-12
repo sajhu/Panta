@@ -59,12 +59,22 @@
                 android:text="@string/dummy_usuario"
                 android:textSize="18sp" />
 
+            <TextView
+                android:id="@+id/detalle_viaje_cupos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/detalle_conductor_nombre"
+                android:text="@string/dummy_cupos"
+                android:textColor="@color/darkGreen"
+                android:textSize="30sp" />
+
             <ImageView
                 android:id="@+id/detalle_usuario_foto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_below="@+id/detalle_conductor_nombre"
+                android:layout_below="@+id/detalle_viaje_cupos"
                 android:src="@drawable/ic_launcher" />
 
             <Button
@@ -87,7 +97,6 @@
                 android:drawableLeft="@drawable/ic_action_call"
                 android:onClick="llamar"
                 android:text="@string/boton_detalle_llamar" />
-
         </RelativeLayout>
     </ScrollView>
 

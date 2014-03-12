@@ -195,7 +195,7 @@ public class MainPanta extends FragmentActivity {
 				cargado = true;
 
 		} catch (FileNotFoundException e) {
-			Log.d(MainPanta.class.toString(), "error cargando panda");
+			Log.d(MainPanta.class.toString(), "Primera ejecución, no hay caché");
 		} catch (OptionalDataException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {

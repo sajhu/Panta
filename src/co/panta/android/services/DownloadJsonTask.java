@@ -104,20 +104,11 @@ public class DownloadJsonTask extends AsyncTask<String, Void, ArrayList<Viaje>>{
 
 					array.add(viajePrueba);
 
-
-
-//					HashMap<String, String> contact = new HashMap<String, String>();
-//
-//					// adding each child node to HashMap key => value
-//					contact.put(TAG_ID, id);
-//					contact.put(TAG_DRIVER_NAME, name);
-//					contact.put(TAG_DESCRIPTION, descripcion);
-//					contact.put(TAG_DRIVER_PHONE, mobile);
-					echo("Cargó bien");
-
-					// adding contact to contact list
+					echo("cargó ID" + viajePrueba.id);
 
 				}
+				echo("cargados " + array.size() + " viajes");
+				
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
