@@ -41,24 +41,33 @@ public class DetalleViajeActivity extends Activity  {
 		
 		viaje = (Viaje) intent.getSerializableExtra(MainPanta.INTENT_DAR_VIAJE);
 		
-		cargarImagen(R.id.detalle_usuario_foto, viaje.conductor.foto);
+		if(viaje == null)
+		{
+			poblarTexto(R.id.detalle_descripcion_viaje, "No hay viajes disponibles en este momento.");
 
+		}
+		else
+		{
+			cargarImagen(R.id.detalle_usuario_foto, viaje.conductor.foto);
+
+			
+			poblarTexto(R.id.detalle_descripcion_viaje, viaje.descripcion);
+			
+			poblarTexto(R.id.detalle_conductor_nombre, viaje.conductor.toString());
+			
 		
-		poblarTexto(R.id.detalle_descripcion_viaje, viaje.descripcion);
-		
-		poblarTexto(R.id.detalle_conductor_nombre, viaje.conductor.toString());
-		
-	
-		poblarTexto(R.id.detalle_viaje_cupos, viaje.sillas + " cupos");
-		
-		Button boton_llamar = (Button) findViewById(R.id.boton_detalle_llamar);
-		Button boton_sms = (Button) findViewById(R.id.boton_detalle_sms);
+			poblarTexto(R.id.detalle_viaje_cupos, viaje.sillas + " cupos");
+			
+			Button boton_llamar = (Button) findViewById(R.id.boton_detalle_llamar);
+			Button boton_sms = (Button) findViewById(R.id.boton_detalle_sms);
+			
+
+			
+			poblarTexto(R.id.detalle_viaje_hora, tiempoRelativo(viaje.fecha, viaje.hora));
+
+		}
 		
 
-		
-		poblarTexto(R.id.detalle_viaje_hora, tiempoRelativo(viaje.fecha, viaje.hora));
-
-		
 		
 	}
 

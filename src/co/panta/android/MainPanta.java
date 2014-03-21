@@ -273,12 +273,12 @@ public class MainPanta extends FragmentActivity {
 			
 			Fragment fragment = null;
 			
-			
+			echo ("pido " + position);
 			Bundle args = new Bundle();
 			args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
 			
 			
-			// Aqui se dice que fragmentomostrar según la posición
+			// Aqui se dice que fragmento mostrar según la posición
 			switch (position) {
 			case 0:
 				fragment = new PasajeroFragment();

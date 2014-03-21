@@ -29,7 +29,7 @@ public class DummySectionFragment extends Fragment {
 		TextView dummyTextView = (TextView) rootView
 				.findViewById(R.id.section_label);
 		dummyTextView.setText(Integer.toString(getArguments().getInt(
-				ARG_SECTION_NUMBER)));
+				ARG_SECTION_NUMBER)) + " panta");
 		return rootView;
 	}
 }
