@@ -21,7 +21,6 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
 import android.widget.Toast;
 import co.panta.android.model.Panta;
 import co.panta.android.pojos.Viaje;
@@ -32,6 +31,7 @@ public class MainPanta extends FragmentActivity {
 	private static final String PERSISTENCIA_ARCHIVO_VIAJES = "viajes.data";
 
 	public static final String INTENT_DAR_VIAJE = "co.panta.android.pojos.Viaje";
+	public static final String INTENT_REFERENCIA_MUNDO = "co.panta.android.model.Panta";
 
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -72,8 +72,10 @@ public class MainPanta extends FragmentActivity {
 		// CONTROL APLICACIÓN
 		if(!estaLogueado())
 		{
-	        Intent intentSettings = new Intent(this, LoginActivity.class);
-	        this.startActivity(intentSettings);
+	        Intent intentLogin = new Intent(this, LoginActivity.class);
+	        intentLogin.putExtra(INTENT_REFERENCIA_MUNDO, panta);
+	        
+	        this.startActivity(intentLogin);
 		}
 
         
@@ -150,7 +152,6 @@ public class MainPanta extends FragmentActivity {
 	private void cargarViajesServidor() {
 		
 		
-		echo("Descargando...");
 		
 		//TODO poner el codigo de carga.. debe generar un ArrayList
 		// de Viaje (ArrayList<Viaje>) y llamar a panta
@@ -170,6 +171,8 @@ public class MainPanta extends FragmentActivity {
 		
 		//NO OLVIDAR REVISAR CASOS DE RESPONSE != 0, en especial response 1
 		panta.actualizar(nuevosViajes);
+		
+		echo(nuevosViajes.size() + " nuevos viajes descargados.");
 		
 	}
 
@@ -328,6 +331,9 @@ public class MainPanta extends FragmentActivity {
 	
 	private boolean estaLogueado()
 	{
+		if(!panta.tengoCredenciales())
+			return false;
+		
 		
 		
 		return true;

@@ -1,8 +1,12 @@
 package co.panta.android.services;
 
+import java.security.MessageDigest;
+import java.util.UUID;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.widget.Toast;
 
 public class F {
@@ -40,16 +44,91 @@ public class F {
 		return sharedPref.getInt(llave, 0);
 	}
 	
+	/**
+	 * Atajo para descargar información JSON.
+	 * Debe llamarse dentro de un entorno AsyncTask, asume conectividad
+	 * @param URL la dirección completa a descargar
+	 * @return retorna el JSON obtenido de la URL indicada
+	 */
+	public String downloadJson(String URL)
+	{
+		ServiceHandler sh = new ServiceHandler();
+
+		return sh.makeServiceCall(URL, ServiceHandler.GET);
+	}
+	 
+	
+	/**
+	 * Imprime un Toast en el contexto dado por un tiempo corto
+	 * @param context Activity actual
+	 * @param text texto a desplegar
+	 */
 	public static void echo(Context context, String text)
 	{
-		Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
-		toast.show();
+		echo(context, text, Toast.LENGTH_SHORT);
 	}
 	
+	/**
+	 * Imprime un Toast en el contexto dado por la duración dada
+	 * @param context Activity actual
+	 * @param text texto a desplegar
+	 * @param duration una constante de Toast.
+	 */
 	public static void echo(Context context, String text, int duration)
 	{
 		Toast toast = Toast.makeText(context, text, duration);
 		toast.show();
 	}
+	
+	/**
+	 * Creates a secret out of a clear text password, adding a random salt and hashing with md5
+	 * @param password password to obscure
+	 * @return obscured userSecret from password
+	 */
+	public static String createSecret(String password)
+	{
+		String salt = UUID.randomUUID().toString();
+		
+		String hash = md5(password + ":" + salt);
+		
+		String secret = hash + ":" + salt;
+		
+		Log.i("AUTH", "userSecret calculated to " + secret);
+		
+		return secret;
+		
+	}
+	
+	/**
+	 * Returns de MD5 hash of any string in a String form
+	 * @param md5 clear text
+	 * @return md5 hash
+	 */
+	public static String md5(String md5) {
+		   try {
+		       	MessageDigest md = MessageDigest.getInstance("MD5");
+		        byte[] array = md.digest(md5.getBytes());
+		        StringBuffer sb = new StringBuffer();
+		        for (int i = 0; i < array.length; ++i) {
+		          sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100).substring(1,3));
+		       }
+		        return sb.toString();
+		    } catch (java.security.NoSuchAlgorithmException e) {
+		    }
+		    return null;
+		}
+	
+	/**
+	 * Returns the url to pool for user authentication
+	 * @param user
+	 * @param password in clean text, will be obscured in userSecret
+	 * @return URL to poll for JSON response
+	 */
+	public static String buildLoginURL(String user, String password)
+	{
+		return API.buildURL(API.AUTHENTICATE, user, createSecret(password), null);
+	}
+	
+
 	
 }

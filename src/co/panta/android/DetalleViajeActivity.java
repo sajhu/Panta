@@ -23,7 +23,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import co.panta.android.pojos.Viaje;
 import co.panta.android.services.DownloadImageTask;
-import co.panta.android.services.RoundedImageView;
 
 public class DetalleViajeActivity extends Activity  {
 
