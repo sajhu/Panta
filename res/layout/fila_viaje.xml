@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lista_viajes_item"
+    android:layout_width="match_parent"
+    android:layout_height="150dp"
+    android:layout_margin="15dp"
+    android:background="@drawable/lista_viajes_background" >
+
+    <TextView
+        android:id="@+id/lista_viajes_descripcion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/lista_viajes_foto"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/lista_viajes_foto"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:height="120dp"
+        android:text="@string/dummy_descripcion"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@color/panta_azul" />
+
+    <TextView
+        android:id="@+id/lista_viajes_hora_contextual"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/lista_viajes_icon_hora"
+        android:layout_alignTop="@+id/lista_viajes_icon_hora"
+        android:layout_marginLeft="14dp"
+        android:layout_toLeftOf="@+id/lista_viajes_foto"
+        android:layout_toRightOf="@+id/lista_viajes_hora"
+        android:gravity="center_vertical"
+        android:text="@string/dummy_hora_contextual"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <ImageView
+        android:id="@+id/lista_viajes_foto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="18dp"
+        android:src="@drawable/ic_action_person" />
+
+    <TextView
+        android:id="@+id/lista_viajes_hora"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/lista_viajes_hora_contextual"
+        android:layout_alignBottom="@+id/lista_viajes_hora_contextual"
+        android:layout_toRightOf="@+id/lista_viajes_icon_hora"
+        android:text="@string/dummy_hour"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/panta_texto" />
+
+    <ImageView
+        android:id="@+id/lista_viajes_icon_hora"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/lista_viajes_descripcion"
+        android:layout_below="@+id/lista_viajes_descripcion"
+        android:src="@drawable/ic_action_time" />
+
+</RelativeLayout>
