@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="20dp" >
+
+    <TextView
+        android:id="@+id/descripcion_publicar_viaje"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="27dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="@string/nuevo_viaje_descipcion"
+        android:textColor="@color/panta_azul"
+        android:textSize="18sp"
+        android:textStyle="italic" />
+
+    <EditText
+        android:id="@+id/form_publicar_descipcion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/publicar_toggle_destino"
+        android:layout_below="@+id/descripcion_publicar_viaje"
+        android:layout_centerHorizontal="true"
+        android:ems="13"
+        android:hint="@string/publicar_descripcion_hint"
+        android:inputType="textMultiLine"
+        android:paddingBottom="0dp"
+        android:paddingTop="10dp" />
+
+    <Switch
+        android:id="@+id/publicar_toggle_destino"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/pickerHoraViaje"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="15dp"
+        android:gravity="left|center_vertical|end"
+        android:paddingLeft="0dp"
+        android:text="@string/form_destino_viaje"
+        android:textOff="@string/destino_uniandes"
+        android:textOn="@string/destino_home" />
+
+    <Button
+        android:id="@+id/boton_enviar_publicar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="30dp"
+        android:layout_marginRight="32dp"
+        android:background="@color/panta_azul"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:text="@string/form_publicar_viaje"
+        android:textColor="@color/panta_amarillo"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TimePicker
+        android:id="@+id/pickerHoraViaje"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/boton_enviar_publicar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="22dp" />
+
+    <EditText
+        android:id="@+id/form_publicar_cupos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/form_publicar_descipcion"
+        android:layout_below="@+id/pickerHoraViaje"
+        android:ems="6"
+        android:hint="@string/cupos_viaje"
+        android:inputType="number"
+        android:maxEms="6"
+        android:width="100dp" />
+
+	</RelativeLayout>
