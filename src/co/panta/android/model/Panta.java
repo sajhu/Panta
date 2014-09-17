@@ -3,6 +3,8 @@ package co.panta.android.model;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 import android.annotation.SuppressLint;
@@ -111,6 +113,8 @@ public class Panta implements Serializable {
 		
 		viajes = nuevosViajes;
 		
+		ordenarPorHora();
+		
 		revisarBloqueados();
 		
 		fechaActualizacion = new Date();
@@ -118,6 +122,31 @@ public class Panta implements Serializable {
 		actualizaciones++;
 		
 		//return "A" + actualizaciones +": " + viajes.size() + " nuevos viajes"; 
+	}
+
+	public void ordenarPorHora() {
+		ArrayList<Viaje> arreglo = (ArrayList<Viaje>) viajes.clone();
+        for( int i = 1; i < arreglo.size(); i++ )
+        {
+            for( int j = i; j > 0 && compararHoras(viajes.get(j - 1), viajes.get(j)); j-- )
+            {
+            	Viaje j0 = viajes.get(j);
+            	Viaje j1 = viajes.get(j - 1);
+            	
+                Viaje temp = j0;
+                j0 = j1;
+                j1 = temp;
+            }
+        }
+       
+		
+	}
+	
+	private boolean compararHoras(Viaje uno, Viaje dos)
+	{
+		int horaUno = Integer.parseInt(uno.hora);
+		int horaDos = Integer.parseInt(dos.hora);
+		return horaUno > horaDos;
 	}
 
 	/**

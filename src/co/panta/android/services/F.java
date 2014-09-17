@@ -3,10 +3,15 @@ package co.panta.android.services;
 import java.security.MessageDigest;
 import java.util.UUID;
 
+import co.panta.android.R;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.os.Vibrator;
 import android.view.Gravity;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class F {
@@ -57,6 +62,25 @@ public class F {
 		return sh.makeServiceCall(URL, ServiceHandler.GET);
 	}
 	 
+	/**
+	 * Hace que el dispositivo vibre por 100ms
+	 * @param context el contexto actual
+	 */
+	public static void vibrar(Context context)
+	{
+		vibrar(context, 100);
+	}
+	
+	/**
+	 * Hace que el dispositivo vibre por un tiempo determinado
+	 * @param context el contexto actual
+	 * @param duracion la duración de la vibración en ms
+	 */
+	public static void vibrar(Context context, int duracion)
+	{
+		Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+		 v.vibrate(duracion);
+	}
 	
 	/**
 	 * Imprime un Toast en el contexto dado por un tiempo corto
@@ -83,6 +107,10 @@ public class F {
 	{
 		Toast toast = Toast.makeText(context, text, duration);
 		toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER, 0, 0);
+		
+		TextView v = (TextView) toast.getView().findViewById(android.R.id.message);
+		toast.show();
+		
 		toast.show();
 	}
 	

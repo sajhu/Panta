@@ -6,9 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class CommunityFragment extends Fragmento {
+public class SobrePantaFragment extends Fragmento {
 	
-	public CommunityFragment(){}
+	public SobrePantaFragment(){}
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

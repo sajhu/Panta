@@ -125,6 +125,15 @@
                 android:textColor="@color/counter_text_color"
                 android:textSize="24sp"
                 android:width="200dp" />
+            
+             <ImageView
+                 android:id="@+id/detalle_ubicacion_foto"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_alignParentRight="true"
+                 android:layout_below="@+id/boton_detalle_sms"
+                 android:layout_marginTop="15dp"
+                 android:src="@drawable/ic_action_place" />
 
         </RelativeLayout>
     </ScrollView>

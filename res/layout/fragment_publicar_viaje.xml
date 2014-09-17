@@ -22,27 +22,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/publicar_toggle_destino"
+        android:layout_alignRight="@+id/pickerHoraViaje"
         android:layout_below="@+id/descripcion_publicar_viaje"
-        android:layout_centerHorizontal="true"
         android:ems="13"
         android:hint="@string/publicar_descripcion_hint"
         android:inputType="textMultiLine"
         android:paddingBottom="0dp"
         android:paddingTop="10dp" />
-
-    <Switch
-        android:id="@+id/publicar_toggle_destino"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/pickerHoraViaje"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="15dp"
-        android:layout_marginTop="15dp"
-        android:gravity="left|center_vertical|end"
-        android:paddingLeft="0dp"
-        android:text="@string/form_destino_viaje"
-        android:textOff="@string/destino_uniandes"
-        android:textOn="@string/destino_home" />
 
     <Button
         android:id="@+id/boton_enviar_publicar"
@@ -72,12 +58,38 @@
         android:id="@+id/form_publicar_cupos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/form_publicar_descipcion"
-        android:layout_below="@+id/pickerHoraViaje"
-        android:ems="6"
+        android:layout_alignBaseline="@+id/boton_enviar_publicar"
+        android:layout_alignBottom="@+id/boton_enviar_publicar"
+        android:layout_alignLeft="@+id/pickerHoraViaje"
+        android:ems="4"
         android:hint="@string/cupos_viaje"
         android:inputType="number"
-        android:maxEms="6"
-        android:width="100dp" />
+        android:maxEms="4"
+        android:width="70dp" >
+
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/boton_escoger_ubicacion"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/pickerHoraViaje"
+        android:layout_alignLeft="@+id/form_publicar_descipcion"
+        android:drawableTop="@drawable/ic_pinpoint" />
+
+    <Switch
+        android:id="@+id/publicar_toggle_destino"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/boton_escoger_ubicacion"
+        android:layout_marginTop="17dp"
+        android:gravity="left|center_vertical|end"
+        android:paddingLeft="0dp"
+        android:text="@string/form_destino_viaje"
+        android:textOff="@string/destino_uniandes"
+        android:textOn="@string/destino_home" />
 
 	</RelativeLayout>

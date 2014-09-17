@@ -19,21 +19,32 @@ import android.widget.ImageView;
 public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
     ImageView bmImage;
 	private boolean circular;
-	private int size;
+	private int ancho;
+	private int alto;
 
     public DownloadImageTask(ImageView bmImage) {
         this.bmImage = bmImage;
         circular = false;
-        this.size = 200;
+        this.ancho = 200;
+        this.alto = 200;
     }
     
     public DownloadImageTask(ImageView bmImage, boolean circular, int size) {
         this.bmImage = bmImage;
         this.circular = circular;
-        this.size = size;
+        this.ancho = size;
+        this.alto = size;
     }
     
-    protected Bitmap doInBackground(String... urls) {
+    public DownloadImageTask(ImageView bmImage, boolean b, int ancho,
+			int alto) {
+        this.bmImage = bmImage;
+        this.circular = b;
+        this.ancho = ancho;
+        this.alto = alto;
+	}
+
+	protected Bitmap doInBackground(String... urls) {
         String urldisplay = urls[0];
         
 //        Log.d("panta img", "Descargando desde " + urldisplay);
@@ -42,7 +53,7 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
             InputStream in = new java.net.URL(urldisplay).openStream();
             mIcon11 = BitmapFactory.decodeStream(in);
         } catch (Exception e) {
-            Log.e("panta error", e.getMessage());
+            Log.e("panta ub img", e.getMessage());
             return null;
         }
         return mIcon11;
@@ -57,7 +68,8 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         	if(circular)
         		result = getRoundedShape(intermedio);
         	
-            bmImage.setImageBitmap(result);
+            bmImage.
+            setImageBitmap(result);
     	}
     	
     }
@@ -85,8 +97,8 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
       }
     
     public Bitmap getRoundedShape(Bitmap scaleBitmapImage) {
-        int targetWidth = size;
-        int targetHeight = size;
+        int targetWidth = ancho;
+        int targetHeight = alto;
         Bitmap targetBitmap = Bitmap.createBitmap(targetWidth, 
                             targetHeight,Bitmap.Config.ARGB_8888);
 

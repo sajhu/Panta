@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import co.panta.android.model.Panta;
 import co.panta.android.services.API;
 import co.panta.android.services.F;
+import co.panta.android.services.Parameters;
 import co.panta.android.services.ServiceHandler;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -29,7 +30,7 @@ import android.view.MenuItem;
  * Activity which displays a login screen to the user, offering registration as
  * well.
  */
-public class Login extends Activity {
+public class Registro extends Activity {
 
 
 	/**
@@ -40,18 +41,24 @@ public class Login extends Activity {
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
 	 */
-	private UserLoginTask mAuthTask = null;
+	private UserRegisterTask mAuthTask = null;
 
 	// Values for email and password at the time of the login attempt.
+	private String mNombre;
+	private String mTelefono;
 	private String mEmail;
 	private String mPassword;
 
 	// UI references.
+	private EditText mNombreView;
 	private EditText mEmailView;
+	private EditText mTelefonoView;
 	private EditText mPasswordView;
-	private View mLoginFormView;
-	private View mLoginStatusView;
-	private TextView mLoginStatusMessageView;
+	
+	
+	private View mRegisterFormView;
+	private View mRegisterStatusView;
+	private TextView mRegisterStatusMessageView;
 
 	private Panta panta;
 
@@ -59,45 +66,42 @@ public class Login extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.activity_login);
+		setContentView(R.layout.activity_registro);
 		setupActionBar();
 		Intent intent = getIntent();
 
 
 		// Set up the login form.
-		mEmail = intent.getStringExtra(EXTRA_EMAIL);
 		
-		panta = (Panta) intent.getSerializableExtra(MainActivity.INTENT_REQUEST_LOGIN_DETAILS);
 
-		Log.d("panta login", "llego mundo " + panta);
 		mEmailView = (EditText) findViewById(R.id.campo_registro_email);
+		mNombreView = (EditText) findViewById(R.id.campo_registro_nombre);
+		mTelefonoView = (EditText) findViewById(R.id.campo_registro_telefono);
 		//mEmailView.setText(mEmail);
 
-		mPasswordView = (EditText) findViewById(R.id.password);
+		mPasswordView = (EditText) findViewById(R.id.campo_registro_clave);
 		mPasswordView
 				.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 					@Override
 					public boolean onEditorAction(TextView textView, int id,
 							KeyEvent keyEvent) {
 						if (id == R.id.login || id == EditorInfo.IME_NULL) {
-							attemptLogin();
+							attemptRegister();
 							return true;
 						}
 						return false;
 					}
 				});
-		
-	
 
-		mLoginFormView = findViewById(R.id.register_form);
-		mLoginStatusView = findViewById(R.id.login_status);
-		mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
+		mRegisterFormView = findViewById(R.id.register_form);
+		mRegisterStatusView = findViewById(R.id.register_status);
+		mRegisterStatusMessageView = (TextView) findViewById(R.id.register_status_message);
 
-		findViewById(R.id.sign_in_button).setOnClickListener(
+		findViewById(R.id.sign_up_button).setOnClickListener(
 				new View.OnClickListener() {
 					@Override
 					public void onClick(View view) {
-						attemptLogin();
+						attemptRegister();
 					}
 				});
 	}
@@ -135,46 +139,32 @@ public class Login extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
-		getMenuInflater().inflate(R.menu.login, menu);
+//		getMenuInflater().inflate(R.menu.login, menu);
 		return true;
 	}
-	
-	public void onClick(View v) {
-		Log.d("panta register", "son iguales " + (v.getId() == R.id.link_crear_cuenta));
-        clickRegistrar();
-      }  
 
-	public void clickRegistrar()
-	{
-		Intent registro = new Intent(this, Registro.class);
-		
-		startActivity(registro);
-	}
 	
-	
-	public void almacenarCredenciales(String user, String userSecret)
-	{
-		panta.usuario = user;
-		panta.userSecret = userSecret;
-		Log.d("panta login", "datos computados: " + panta);
-	}
 	
 	/**
 	 * Attempts to sign in or register the account specified by the login form.
 	 * If there are form errors (invalid email, missing fields, etc.), the
 	 * errors are presented and no actual login attempt is made.
 	 */
-	public void attemptLogin() {
+	public void attemptRegister() {
 		if (mAuthTask != null) {
 			return;
 		}
 
 		// Reset errors.
 		mEmailView.setError(null);
+		mTelefonoView.setError(null);
+		mNombreView.setError(null);
 		mPasswordView.setError(null);
 
 		// Store values at the time of the login attempt.
 		mEmail = mEmailView.getText().toString();
+		mNombre = mNombreView.getText().toString();
+		mTelefono = mTelefonoView.getText().toString();
 		mPassword = mPasswordView.getText().toString();
 
 		boolean cancel = false;
@@ -185,6 +175,18 @@ public class Login extends Activity {
 			mPasswordView.setError(getString(R.string.error_field_required));
 			focusView = mPasswordView;
 			cancel = true;
+		} else if (TextUtils.isEmpty(mEmail)) {
+			mPasswordView.setError(getString(R.string.error_field_required));
+			focusView = mEmailView;
+			cancel = true;
+		} else if (TextUtils.isEmpty(mNombre)) {
+			mPasswordView.setError(getString(R.string.error_field_required));
+			focusView = mNombreView;
+			cancel = true;
+		} else if (TextUtils.isEmpty(mTelefono)) {
+			mPasswordView.setError(getString(R.string.error_field_required));
+			focusView = mTelefonoView;
+			cancel = true;
 		} else if (mPassword.length() < 4) {
 			mPasswordView.setError(getString(R.string.error_invalid_password));
 			focusView = mPasswordView;
@@ -192,11 +194,7 @@ public class Login extends Activity {
 		}
 
 		// Check for a valid email address.
-		if (TextUtils.isEmpty(mEmail)) {
-			mEmailView.setError(getString(R.string.error_field_required));
-			focusView = mEmailView;
-			cancel = true;
-		} 
+
 //		else if (!mEmail.contains("@")) {
 //			mEmailView.setError(getString(R.string.error_invalid_email));
 //			focusView = mEmailView;
@@ -210,9 +208,9 @@ public class Login extends Activity {
 		} else {
 			// Show a progress spinner, and kick off a background task to
 			// perform the user login attempt.
-			mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
+			mRegisterStatusMessageView.setText(R.string.register_progress_signing_in);
 			showProgress(true);
-			mAuthTask = new UserLoginTask();
+			mAuthTask = new UserRegisterTask();
 			mAuthTask.execute((Void) null);
 		}
 	}
@@ -229,32 +227,32 @@ public class Login extends Activity {
 			int shortAnimTime = getResources().getInteger(
 					android.R.integer.config_shortAnimTime);
 
-			mLoginStatusView.setVisibility(View.VISIBLE);
-			mLoginStatusView.animate().setDuration(shortAnimTime)
+			mRegisterStatusView.setVisibility(View.VISIBLE);
+			mRegisterStatusView.animate().setDuration(shortAnimTime)
 					.alpha(show ? 1 : 0)
 					.setListener(new AnimatorListenerAdapter() {
 						@Override
 						public void onAnimationEnd(Animator animation) {
-							mLoginStatusView.setVisibility(show ? View.VISIBLE
+							mRegisterStatusView.setVisibility(show ? View.VISIBLE
 									: View.GONE);
 						}
 					});
 
-			mLoginFormView.setVisibility(View.VISIBLE);
-			mLoginFormView.animate().setDuration(shortAnimTime)
+			mRegisterFormView.setVisibility(View.VISIBLE);
+			mRegisterFormView.animate().setDuration(shortAnimTime)
 					.alpha(show ? 0 : 1)
 					.setListener(new AnimatorListenerAdapter() {
 						@Override
 						public void onAnimationEnd(Animator animation) {
-							mLoginFormView.setVisibility(show ? View.GONE
+							mRegisterFormView.setVisibility(show ? View.GONE
 									: View.VISIBLE);
 						}
 					});
 		} else {
 			// The ViewPropertyAnimator APIs are not available, so simply show
 			// and hide the relevant UI components.
-			mLoginStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
-			mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+			mRegisterStatusView.setVisibility(show ? View.VISIBLE : View.GONE);
+			mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
 		}
 	}
 
@@ -262,13 +260,23 @@ public class Login extends Activity {
 	 * Represents an asynchronous login/registration task used to authenticate
 	 * the user.
 	 */
-	public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+	public class UserRegisterTask extends AsyncTask<Void, Void, Integer> {
 		@Override
-		protected Boolean doInBackground(Void... params) {
+		protected Integer doInBackground(Void... params) {
 			
 			
 		try{
-			String JsonURL = F.buildLoginURL(mEmail, mPassword);
+			
+			Parameters<String> tags = new Parameters<String>();
+			
+			
+			tags.add(API.TAG_DRIVER_NAME, mNombre);
+			tags.add(API.TAG_DRIVER_SURNAME, "Fuentes");
+			tags.add(API.TAG_DRIVER_PHONE, mTelefono);
+			tags.add(API.TAG_DRIVER_PASSWORD, mPassword);
+			tags.add(API.USER_ID_PARAM, mEmail);
+			
+			String JsonURL = API.buildURL(API.REGISTER, null, null, tags);
 
 			ServiceHandler sh = new ServiceHandler();
 
@@ -286,12 +294,15 @@ public class Login extends Activity {
 				// Getting JSON Array node
 				int responseCode = jsonObj.getInt(API.TAG_RESPONSE);
 
-				if(responseCode == API.Error.AUTH_SUCCESS)
-				{
-					Log.d("panta", "Acceso concedido");
-					return true;
-				}
-				Log.d("panta", "Acceso no concedido");
+				return Integer.valueOf(responseCode);
+//				if(responseCode == API.Error.RESPONSE_OK)
+//				{
+//					Log.d("panta", "Cuenta registrada");
+//					return true;
+//				}
+//				else {
+//				}
+//				Log.d("panta", "No se pudo crear " + responseCode);
 
 			} else {
 				Log.e("panta", "Couldn't get any data from the url");
@@ -299,33 +310,28 @@ public class Login extends Activity {
 			
 		} catch (JSONException e) {
 			Log.e("panta", e.getMessage());
-			return false;
+			return 200;
 		}
 
 
 			// TODO: register the new account here.
-			return false;
+			return 200;
 		}
 
 		@Override
-		protected void onPostExecute(final Boolean success) {
+		protected void onPostExecute( Integer result) {
 			mAuthTask = null;
 			showProgress(false);
-
-			if (success) {
-				almacenarCredenciales(mEmail, F.createSecret(mPassword));
+			int response = result.intValue();
+			
+			if (response == API.Error.RESPONSE_OK) {
 				
-				String detalles = mEmail + "::" + F.createSecret(mPassword);
-				
-				Intent devolverResultado = new Intent();
-				devolverResultado.putExtra(MainActivity.INTENT_REQUEST_LOGIN_DETAILS, detalles);
-				
-				setResult(MainActivity.REQUEST_LOGIN_DETAILS, devolverResultado);				
+							
 				
 				finish();
 			} else {
 				mPasswordView
-						.setError(getString(R.string.error_incorrect_password));
+						.setError("Oops " + response );
 				mPasswordView.requestFocus();
 			}
 		}

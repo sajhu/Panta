@@ -1,7 +1,5 @@
 package co.panta.android;
 
-import co.panta.android.R;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -11,19 +9,12 @@ import java.io.ObjectOutputStream;
 import java.io.OptionalDataException;
 import java.util.ArrayList;
 
-import co.panta.android.adapter.NavDrawerListAdapter;
-import co.panta.android.model.NavDrawerItem;
-import co.panta.android.model.Panta;
-import co.panta.android.pojos.Usuario;
-import co.panta.android.pojos.Viaje;
-import co.panta.android.services.API;
-import co.panta.android.services.DownloadJsonTask;
-import co.panta.android.services.F;
-
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
@@ -38,6 +29,16 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
+import co.panta.android.adapter.NavDrawerListAdapter;
+import co.panta.android.model.NavDrawerItem;
+import co.panta.android.model.Panta;
+import co.panta.android.pojos.Usuario;
+import co.panta.android.pojos.Viaje;
+import co.panta.android.services.API;
+import co.panta.android.services.DownloadJsonTask;
+import co.panta.android.services.F;
+import co.panta.android.services.ShakeDetectActivity;
+import co.panta.android.services.ShakeDetectActivityListener;
 
 public class MainActivity extends Activity {
 
@@ -88,6 +89,8 @@ public class MainActivity extends Activity {
 
 	private Panta panta;
 
+	private ShakeDetectActivity shakeDetectActivity;
+
 	public void actualizarBurbujaViajes(int numero) {
 		navDrawerItems.get(0).setCount(numero + "");
 	}
@@ -134,6 +137,7 @@ public class MainActivity extends Activity {
 		}
 
 		actualizarBurbujaViajes(panta.darNumeroViajes());
+		panta.ordenarPorHora();
 
 		return cargado;
 
@@ -142,20 +146,23 @@ public class MainActivity extends Activity {
 	public void actualizarListaViajes()
 	{
 		
+		actualizarBurbujaViajes(panta.darNumeroViajes());
+		panta.ordenarPorHora();
+		displayView(0);
 	}
 	
 	private void cargarViajesServidor() {
 
 		ArrayList<Viaje> nuevosViajes = new ArrayList<Viaje>();
 
-		new DownloadJsonTask(nuevosViajes).execute(API.buildURL(API.GET_TRIPS,
+		new DownloadJsonTask(this, nuevosViajes).execute(API.buildURL(API.GET_TRIPS,
 				panta.usuario, panta.userSecret));
 
-		// NO OLVIDAR REVISAR CASOS DE RESPONSE != 0, en especial response 1
-		panta.actualizar(nuevosViajes);
-		actualizarBurbujaViajes(panta.darNumeroViajes());
+//		displayView(0);
+
 		
-		displayView(0);
+		panta.actualizar(nuevosViajes);
+		
 
 		F.echo(this, "Actualizando los viajes ...");
 
@@ -191,7 +198,7 @@ public class MainActivity extends Activity {
 			fragment = new PhotosFragment();
 			break;
 		case 3:
-			fragment = new CommunityFragment();
+			fragment = new SobrePantaFragment();
 			break;
 		case 4:
 			fragment = new PagesFragment();
@@ -390,6 +397,24 @@ public class MainActivity extends Activity {
 			// on first time display view for first nav item
 			displayView(0);
 		}
+		
+		
+		shakeDetectActivity = new ShakeDetectActivity(this);
+		shakeDetectActivity.addListener(new ShakeDetectActivityListener() {
+			
+			@Override
+			public void shakeDetected() {
+				// TODO Auto-generated method stub
+				hayShake();
+			}
+		});
+		
+	}
+
+	protected void hayShake() {
+		F.vibrar(this, 500);
+		cargarViajesServidor();
+		
 	}
 
 	@Override
@@ -409,13 +434,13 @@ public class MainActivity extends Activity {
 		case R.id.action_settings:
 			F.echo(this, "Opción no disponible", Toast.LENGTH_LONG);
 			return true;
-		case R.id.action_logout:
-			cerrarSesion();
-			return true;
-		case R.id.action_filtrar:
-			F.echo(this, "Hay " + panta.viajes.size() + " viajes");
-
-			return true;
+//		case R.id.action_logout:
+//			cerrarSesion();
+//			return true;
+//		case R.id.action_filtrar:
+//			F.echo(this, "Hay " + panta.viajes.size() + " viajes");
+//			return true;
+			
 		case R.id.action_refrescar:
 			cargarViajesServidor();
 			return true;
@@ -443,8 +468,8 @@ public class MainActivity extends Activity {
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		// if nav drawer is opened, hide the action items
 		boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-		menu.findItem(R.id.action_logout).setVisible(!drawerOpen);
-		menu.findItem(R.id.action_filtrar).setVisible(!drawerOpen);
+		menu.findItem(R.id.action_refrescar).setVisible(!drawerOpen);
+//		menu.findItem(R.id.action_filtrar).setVisible(!drawerOpen);
 		return super.onPrepareOptionsMenu(menu);
 	}
 
@@ -452,9 +477,17 @@ public class MainActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		actualizarBurbujaViajes(panta.darNumeroViajes() + "");
+		shakeDetectActivity.onResume();
 
 	}
 
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		shakeDetectActivity.onPause();
+	}
+	
 	@Override
 	protected void onStart() {
 		super.onStart();
@@ -489,6 +522,25 @@ public class MainActivity extends Activity {
 	public void setTitle(CharSequence title) {
 		mTitle = title;
 		getActionBar().setTitle(mTitle);
+	}
+
+	public void ventana(String mensaje) {
+		// 1. Instantiate an AlertDialog.Builder with its constructor
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		
+		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+	           public void onClick(DialogInterface dialog, int id) {
+	               // User clicked OK button
+	           }
+	       });
+
+		// 2. Chain together various setter methods to set the dialog characteristics
+		builder.setMessage(mensaje)
+		       .setTitle(getString(R.string.app_name));
+
+		// 3. Get the AlertDialog from create()
+		AlertDialog dialog = builder.create();
+		
 	}
 
 }

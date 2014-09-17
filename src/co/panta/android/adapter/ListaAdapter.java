@@ -82,6 +82,9 @@ public class ListaAdapter extends ArrayAdapter<Viaje> {
 	public String tiempoRelativo(String fecha, String hora)
 	{
 
+		if(hora.length() == 3)
+			hora = "0" + hora;
+		
 		String fechaViaje = fecha + " " + hora;
 
 		DateFormat conHoras = new SimpleDateFormat("yyyy-MM-dd HHmm");

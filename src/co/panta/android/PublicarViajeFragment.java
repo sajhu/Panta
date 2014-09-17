@@ -3,6 +3,7 @@ package co.panta.android;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -24,6 +25,11 @@ import co.panta.android.services.ServiceHandler;
 public class PublicarViajeFragment extends Fragmento {
 
 
+	public static final int ESCOGER_UBICACION = 0;
+	public static final String LATITUD = "latitud";
+	public static final String LONGITUD = "longitud";
+	public static final int ESCOGER_UBICACION_OK = 1;
+
 	private String mDescripcion;
 
 	private String mTiempo;
@@ -43,6 +49,10 @@ public class PublicarViajeFragment extends Fragmento {
 	private TextView mCuposView;
 
 	private Button botonPublicar;
+
+	private Button botonUbicacion;
+	private String latitud;
+	private String longitud;
 
 
 	public PublicarViajeFragment() {}
@@ -64,6 +74,16 @@ public class PublicarViajeFragment extends Fragmento {
 		mPickerHoraView = (TimePicker) view.findViewById(R.id.pickerHoraViaje);
 		mToggleDestinoView = (Switch) view.findViewById(R.id.publicar_toggle_destino);
 
+		botonUbicacion = (Button) view.findViewById(R.id.boton_escoger_ubicacion);
+		botonUbicacion.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				escogerUbicacion();
+				
+			}
+		});
+		
 		botonPublicar = (Button) view.findViewById(R.id.boton_enviar_publicar);
 		botonPublicar.setOnClickListener(new OnClickListener() {
 			
@@ -76,6 +96,26 @@ public class PublicarViajeFragment extends Fragmento {
 		return view;
 	}
 	
+	protected void escogerUbicacion() {
+		Intent escogerUbicacion = new Intent(getActivity(), LugarChooser.class);
+		
+		startActivityForResult(escogerUbicacion, ESCOGER_UBICACION);
+		
+	}
+
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+	    if (requestCode == ESCOGER_UBICACION) {
+	        if(resultCode == ESCOGER_UBICACION_OK){
+	            latitud = data.getStringExtra(LATITUD);
+	            longitud = data.getStringExtra(LONGITUD);
+	            
+	        }
+	     F.echo(getActivity(), "Llegó: " + latitud + " " + longitud);
+	    }
+	}
+
+
 	public void publicar()
 	{
 		mDescripcion = mDescripcionView.getText().toString();
@@ -108,6 +148,12 @@ public class PublicarViajeFragment extends Fragmento {
 			param.add(API.DATE_PARAM, API.DATE_TODAY);
 			param.add(API.DESTINATION_PARAM, Integer.toString(mDestino));
 			param.add(API.TAG_SEATS, mCupos);
+			
+			if(latitud != null && longitud != null && !latitud.equals(""))
+			{
+				param.add(API.TAG_LATITUD, latitud);
+				param.add(API.TAG_LONGITUD, longitud);
+			}
 
 			String JsonURL = API.buildURL(API.PUBLISH, panta.usuario, panta.userSecret, param);
 			

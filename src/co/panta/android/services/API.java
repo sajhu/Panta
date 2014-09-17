@@ -17,6 +17,8 @@ public class API {
 	
 	public static final String AUTHENTICATE = BASE_API_URL + "auth.php";
 	
+	public static final String REGISTER = BASE_API_URL + "register.php";
+	
 	public static final String GET_TRIPS = BASE_API_URL + "trips.php";
 	
 	public static final String PUBLISH = BASE_API_URL + "send.php";
@@ -90,12 +92,20 @@ public class API {
 	public static final String TAG_DATE = "date";
 	public static final String TAG_TIME = "time";
 	public static final String TAG_SEATS = "seats";
+	public static final String TAG_DESTINO = "destination";
+
+	public static final String TAG_LATITUD = "latitud";
+	public static final String TAG_LONGITUD = "longitud";
+	
 	public static final String TAG_DRIVER = "driver";
 	public static final String TAG_DRIVER_ID = "id";
 	public static final String TAG_DRIVER_NAME = "name";
 	public static final String TAG_DRIVER_SURNAME = "surname";
 	public static final String TAG_DRIVER_PICTURE = "picture";
 	public static final String TAG_DRIVER_PHONE = "phone";
+	public static final String TAG_DRIVER_PASSWORD = "clave";
+
+
 	
 	
 	/**
@@ -112,8 +122,8 @@ public class API {
 	{
 		String url =  service + "?";
 		
-		// Se agregan par�metros obligatorios de autenticaci�n
-		url += USER_ID_PARAM + "=" + userId + "&" + USER_SECRET_PARAM + "=" + userSecret;
+		if(userId != null) // Se agregan par�metros obligatorios de autenticaci�n
+			url += USER_ID_PARAM + "=" + userId + "&" + USER_SECRET_PARAM + "=" + userSecret;
 		
 		if(params != null && params.size() > 0)
 			for (int i = 0; i < params.size(); i++) {

@@ -2,6 +2,7 @@ package co.panta.android;
 
 import java.util.ArrayList;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Intent;
@@ -18,6 +19,7 @@ import co.panta.android.adapter.ListaAdapter;
 import co.panta.android.pojos.Viaje;
 import co.panta.android.services.F;
 
+@SuppressLint("DefaultLocale")
 public class BusquedaViajes extends Activity {
 
 	public static final String REALIZAR_BUSQUEDA_VIAJES = "co.panta.android.BusquedaViajes";
@@ -52,7 +54,7 @@ public class BusquedaViajes extends Activity {
 			NavUtils.navigateUpFromSameTask(this);
 		}
 		
-		setTitle("Buscar: " +query);
+		setTitle("Buscar " +query);
 		
 		filtrarViajes();
 
@@ -86,9 +88,9 @@ public class BusquedaViajes extends Activity {
 
 	private void filtrarViajes() {
 		ArrayList<Viaje> nuevo = new ArrayList<Viaje>();
-		query = query.toLowerCase();
+		query = query.trim().toLowerCase();
 		
-		if(query.startsWith("despues:"))
+		if(query.startsWith("despues:") || query.startsWith("después:"))
 		{
 			int hora = Integer.parseInt(query.split(":")[1]);
 			for (int i = 0; i < viajes.size(); i++) {

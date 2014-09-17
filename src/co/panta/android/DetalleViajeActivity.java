@@ -15,9 +15,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -51,14 +54,16 @@ public class DetalleViajeActivity extends Activity  {
 		else
 		{
 			cargarImagen(R.id.detalle_usuario_foto, viaje.conductor.foto);
+			cargarImagen(R.id.detalle_ubicacion_foto, urlUbicacion(viaje), 1200, 600);
 
 
 			poblarTexto(R.id.detalle_descripcion_viaje, viaje.descripcion);
 
 			poblarTexto(R.id.detalle_conductor_nombre, viaje.conductor.toString());
 
-
-			poblarTexto(R.id.detalle_viaje_cupos, viaje.sillas + " cupos");
+			String destino = (viaje.destino == 1)?"Uniandes":"la ciudad";
+			
+			poblarTexto(R.id.detalle_viaje_cupos, viaje.sillas + " cupos hacia " +destino);
 
 			Button boton_llamar = (Button) findViewById(R.id.boton_detalle_llamar);
 			Button boton_sms = (Button) findViewById(R.id.boton_detalle_sms);
@@ -67,9 +72,35 @@ public class DetalleViajeActivity extends Activity  {
 
 			poblarTexto(R.id.detalle_viaje_hora, horaEstandar(viaje.hora));
 			poblarTexto(R.id.detalle_hora_contextual, tiempoRelativo(viaje.fecha, viaje.hora));
+			
+
 
 		}
 
+	}
+
+	
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		
+		hideKeyboard(this);
+	}
+	
+	public static void hideKeyboard(Activity activity) {
+	    View v = activity.getWindow().getCurrentFocus();
+	    if (v != null) {
+	        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+	        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+	    }
+	}
+	
+	private String urlUbicacion(Viaje viaje) {
+		if(viaje.latitud == null || viaje.longitud == null || viaje.latitud.equals("0"))
+			return "http://maps.googleapis.com/maps/api/staticmap?center=4.602904,-74.065236&zoom=18&size=1000x500&markers=color:blue|4.602904,-74.065236&sensor=false";
+		else
+			return "http://maps.googleapis.com/maps/api/staticmap?center="+viaje.latitud+","+viaje.longitud+"&zoom=18&size=2000x500&markers=color:blue|"+viaje.latitud+","+viaje.longitud+"&sensor=false";
 	}
 
 	private void poblarTexto(int id, String texto) {
@@ -163,6 +194,11 @@ public class DetalleViajeActivity extends Activity  {
 	public void cargarImagen(int id, String url)
 	{
 		new DownloadImageTask((ImageView) findViewById(id), true, 200).execute(url);
+	}
+	
+	public void cargarImagen(int id, String url, int ancho, int alto)
+	{
+		new DownloadImageTask((ImageView) findViewById(id), false, ancho, alto).execute(url);
 	}
 
 	public String horaEstandar(String hora)
